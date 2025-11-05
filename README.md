@@ -10,8 +10,3 @@
 - Debugger running in case of issues
 - Postman for testing fetching
 - All LLMs and LLM features turned off (except for chat)
-
-
-## Fetches
-https://jsonplaceholder.typicode.com/users
-https://jsonplaceholder.typicode.com/posts
