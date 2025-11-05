@@ -1,0 +1,8 @@
+@use './main.scss';
+
+@use './components/button.scss';
+@use './components/table.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
