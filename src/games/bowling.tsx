@@ -27,7 +27,6 @@ const Bowling = () => {
           max="10"
           onChange={(e) => setCurrentRoll(Number(e.currentTarget.value))}
           value={currentRoll}
-          defaultValue={0}
           className="rounded border px-3 py-2"
         />
         <button
