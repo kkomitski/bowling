@@ -1,11 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
 
-import Game from '@/bowling';
-
-// const game = new Game();
+import Game from '@/games/bowling';
 
 const Bowling = () => {
-  const gameRef = useRef(new Game());
+  // const gameRef = useRef(createBowlingGame()); // Functional
+  const gameRef = useRef(new Game()); // OOP
 
   const [currentRoll, setCurrentRoll] = useState<number>(0);
   const [currentScore, setCurrentScore] = useState(gameRef.current.score());

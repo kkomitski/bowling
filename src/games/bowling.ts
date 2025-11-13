@@ -7,6 +7,7 @@ interface Bowling {
   score(): number;
 }
 
+// OOP - Class based implementation
 export default class Game implements Bowling {
   private currentScore: number = 0;
   // Each frame holds its own cumulative score
@@ -95,4 +96,75 @@ export default class Game implements Bowling {
   score() {
     return this.currentScore;
   }
+}
+
+// Functional - Closure based implementation
+export function createBowlingGame(): Bowling {
+  let currentScore = 0;
+  let frames = Array.from({ length: 10 }, () => 0);
+  let rolls = 0;
+  let rollValues: number[] = [];
+  let currentFrame = 0;
+  let bonusesFromRolls = new Map<number, number[]>();
+
+  function roll(noOfPins: number): void {
+    if (noOfPins < 0 || noOfPins > 10) {
+      console.error('Invalid roll value!');
+      return;
+    }
+
+    if (currentFrame > 9) {
+      console.error('Game has finished!');
+      return;
+    }
+
+    rollValues.push(noOfPins);
+    frames[currentFrame] += noOfPins;
+
+    const isFirstBall = rolls % 2 === 0;
+    const isSecondBall = rolls % 2 === 1;
+    const isStrike = isFirstBall && noOfPins === 10;
+    const isSpare = isSecondBall && frames[currentFrame] === 10;
+
+    if (currentFrame < 9) {
+      if (isStrike) {
+        bonusesFromRolls.set(currentFrame, [rolls + 1, rolls + 2]);
+        rolls++;
+        currentFrame++;
+      } else if (isSpare) {
+        bonusesFromRolls.set(currentFrame, [rolls + 1]);
+        currentFrame++;
+      } else if (isSecondBall) {
+        currentFrame++;
+      }
+    } else {
+      if (isStrike && isFirstBall) {
+        rolls++;
+      } else if (
+        isSecondBall &&
+        !isSpare &&
+        rollValues[rolls - 1] !== 10
+      ) {
+        currentFrame++;
+      }
+    }
+
+    rolls++;
+
+    currentScore = frames.reduce((acc, curr) => acc + curr, 0);
+
+    bonusesFromRolls.forEach((bonusRolls) => {
+      bonusRolls.forEach((rollIndex) => {
+        if (rollIndex < rollValues.length) {
+          currentScore += rollValues[rollIndex];
+        }
+      });
+    });
+  }
+
+  function score(): number {
+    return currentScore;
+  }
+
+  return { roll, score };
 }
